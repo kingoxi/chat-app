@@ -1,0 +1,13 @@
+export const APP_NAME = "Heartline Chat";
+export const MAX_MESSAGE_LENGTH = 2000;
+export const MESSAGE_LIMIT = 250;
+export const TYPING_IDLE_MS = 2400;
+export const PARTNER_TYPING_VISIBLE_MS = 5000;
+export const ONLINE_THRESHOLD_MS = 90000;
+export const PRESENCE_HEARTBEAT_MS = 30000;
+export const CHAT_SYNC_INTERVAL_MS = 2500;
+export const QUICK_EMOJIS = ["❤️", "🥹", "✨", "😘", "🫶", "🌙", "💌", "🥰"];
+export const AUDIO_MAX_DURATION_MS = 60000;
+export const AUDIO_MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024;
+export const AUDIO_SIGNED_URL_TTL_SECONDS = 60 * 60;
+export const GIPHY_SEARCH_LIMIT = 12;

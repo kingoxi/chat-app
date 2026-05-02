@@ -1,0 +1,173 @@
+:root {
+  --font-sans: "Inter", "Segoe UI Variable Text", "Segoe UI", "Aptos", system-ui, sans-serif;
+  --font-display: "Inter", "Segoe UI Variable Display", "Segoe UI", "Aptos Display", system-ui, sans-serif;
+  --background: radial-gradient(circle at top left, #ffe9ee 0%, transparent 34%),
+    radial-gradient(circle at top right, #f6e0cf 0%, transparent 28%),
+    linear-gradient(180deg, #fff8f6 0%, #f7eeef 50%, #fff8f2 100%);
+  --foreground: #2d2030;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.9);
+  --surface-muted: rgba(255, 248, 247, 0.72);
+  --border: rgba(118, 76, 96, 0.14);
+  --border-strong: rgba(118, 76, 96, 0.24);
+  --muted: #77677a;
+  --accent: #b24d74;
+  --accent-strong: #8c3558;
+  --accent-soft: #f7dce5;
+  --success: #2f8c72;
+  --danger: #d45a74;
+  --bubble-self: linear-gradient(135deg, #a74468 0%, #cd7f8a 100%);
+  --bubble-peer: rgba(255, 255, 255, 0.82);
+  --shadow: 0 24px 70px rgba(114, 72, 91, 0.16);
+  --ornament-a: radial-gradient(circle, #f4c7d6 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #f2dbbe 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #f9d7cd 0%, transparent 72%);
+}
+
+.dark {
+  --background: radial-gradient(circle at top left, #41253e 0%, transparent 34%),
+    radial-gradient(circle at top right, #332942 0%, transparent 30%),
+    linear-gradient(180deg, #17111b 0%, #130f19 48%, #1a1420 100%);
+  --foreground: #f5edf4;
+  --surface: rgba(31, 24, 39, 0.7);
+  --surface-strong: rgba(35, 27, 43, 0.86);
+  --surface-muted: rgba(39, 30, 48, 0.68);
+  --border: rgba(255, 224, 236, 0.12);
+  --border-strong: rgba(255, 224, 236, 0.18);
+  --muted: #b8a9bd;
+  --accent: #f09ab8;
+  --accent-strong: #ffbfd4;
+  --accent-soft: rgba(240, 154, 184, 0.16);
+  --success: #7bd6b3;
+  --danger: #ff8aa8;
+  --bubble-self: linear-gradient(135deg, #b84f78 0%, #df8ca8 100%);
+  --bubble-peer: rgba(44, 34, 54, 0.92);
+  --shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+  --ornament-a: radial-gradient(circle, #7d2f52 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #4f3657 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #3a2d4f 0%, transparent 72%);
+}
+
+:root[data-accent-theme="sunset"] {
+  --accent: #d95b43;
+  --accent-strong: #b64332;
+  --accent-soft: #f9ded6;
+  --background: radial-gradient(circle at top left, #ffd9cb 0%, transparent 34%),
+    radial-gradient(circle at top right, #ffe6b6 0%, transparent 30%),
+    linear-gradient(180deg, #fff9f3 0%, #fdf0eb 52%, #fff6ee 100%);
+  --bubble-self: linear-gradient(135deg, #d44f46 0%, #f09363 100%);
+  --ornament-a: radial-gradient(circle, #f8b7a6 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #ffd6a3 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #f8d2b6 0%, transparent 72%);
+}
+
+:root[data-accent-theme="violet"] {
+  --accent: #8458d1;
+  --accent-strong: #653bb6;
+  --accent-soft: #ebe1ff;
+  --background: radial-gradient(circle at top left, #efe3ff 0%, transparent 34%),
+    radial-gradient(circle at top right, #e3dcff 0%, transparent 28%),
+    linear-gradient(180deg, #fcf9ff 0%, #f4eefc 50%, #f6f0ff 100%);
+  --bubble-self: linear-gradient(135deg, #6b49c8 0%, #a477eb 100%);
+  --ornament-a: radial-gradient(circle, #d2b8ff 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #dfd0ff 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #ead8ff 0%, transparent 72%);
+}
+
+:root[data-accent-theme="ocean"] {
+  --accent: #1f8ca3;
+  --accent-strong: #126f86;
+  --accent-soft: #d8f2f5;
+  --background: radial-gradient(circle at top left, #d8f2f5 0%, transparent 34%),
+    radial-gradient(circle at top right, #d9edf8 0%, transparent 30%),
+    linear-gradient(180deg, #f7fdff 0%, #edf7f9 48%, #f2fbfc 100%);
+  --bubble-self: linear-gradient(135deg, #117f92 0%, #4bb8b0 100%);
+  --ornament-a: radial-gradient(circle, #a8e3e6 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #b9dbef 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #bfe8e2 0%, transparent 72%);
+}
+
+:root[data-accent-theme="obsidian"] {
+  --foreground: #f3f2f5;
+  --surface: rgba(14, 14, 18, 0.78);
+  --surface-strong: rgba(19, 19, 24, 0.92);
+  --surface-muted: rgba(18, 18, 23, 0.78);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --muted: #a0a0ad;
+  --accent: #9c8bff;
+  --accent-strong: #b0a4ff;
+  --accent-soft: rgba(156, 139, 255, 0.16);
+  --bubble-self: linear-gradient(135deg, #4d3ec5 0%, #7d6cff 100%);
+  --bubble-peer: rgba(21, 21, 27, 0.92);
+  --shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+  --background: radial-gradient(circle at top left, #1f1f28 0%, transparent 34%),
+    radial-gradient(circle at top right, #191921 0%, transparent 28%),
+    linear-gradient(180deg, #060607 0%, #0a0a0d 48%, #050507 100%);
+  --ornament-a: radial-gradient(circle, #2f2f3c 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #24242d 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #1a1a21 0%, transparent 72%);
+}
+
+.dark[data-accent-theme="sunset"] {
+  --accent: #ffac7a;
+  --accent-strong: #ffd0af;
+  --accent-soft: rgba(255, 172, 122, 0.18);
+  --background: radial-gradient(circle at top left, #4d2a23 0%, transparent 34%),
+    radial-gradient(circle at top right, #503626 0%, transparent 30%),
+    linear-gradient(180deg, #181315 0%, #201517 48%, #1c1414 100%);
+  --bubble-self: linear-gradient(135deg, #d86b52 0%, #ef9a6a 100%);
+  --ornament-a: radial-gradient(circle, #87452f 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #6a4a30 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #6f4035 0%, transparent 72%);
+}
+
+.dark[data-accent-theme="violet"] {
+  --accent: #b99fff;
+  --accent-strong: #d4c3ff;
+  --accent-soft: rgba(185, 159, 255, 0.18);
+  --background: radial-gradient(circle at top left, #2d2148 0%, transparent 34%),
+    radial-gradient(circle at top right, #2d2744 0%, transparent 30%),
+    linear-gradient(180deg, #13111e 0%, #171429 48%, #14121f 100%);
+  --bubble-self: linear-gradient(135deg, #8f67f0 0%, #b18dff 100%);
+  --ornament-a: radial-gradient(circle, #5e43a3 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #493d88 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #40386f 0%, transparent 72%);
+}
+
+.dark[data-accent-theme="ocean"] {
+  --accent: #79d8e9;
+  --accent-strong: #a9edf8;
+  --accent-soft: rgba(121, 216, 233, 0.18);
+  --background: radial-gradient(circle at top left, #0f3341 0%, transparent 34%),
+    radial-gradient(circle at top right, #143646 0%, transparent 30%),
+    linear-gradient(180deg, #08161b 0%, #0d1a20 48%, #0a1519 100%);
+  --bubble-self: linear-gradient(135deg, #2a9cb2 0%, #5acec5 100%);
+  --ornament-a: radial-gradient(circle, #1c6177 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #1c5268 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #1b5955 0%, transparent 72%);
+}
+
+.dark[data-accent-theme="obsidian"] {
+  --foreground: #f7f7fa;
+  --surface: rgba(10, 10, 13, 0.82);
+  --surface-strong: rgba(14, 14, 18, 0.94);
+  --surface-muted: rgba(13, 13, 18, 0.82);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --muted: #ababb6;
+  --accent: #9c8bff;
+  --accent-strong: #b0a4ff;
+  --accent-soft: rgba(156, 139, 255, 0.16);
+  --success: #8ee0ba;
+  --danger: #ff9bb0;
+  --bubble-self: linear-gradient(135deg, #4d3ec5 0%, #7d6cff 100%);
+  --bubble-peer: rgba(16, 16, 20, 0.96);
+  --shadow: 0 34px 90px rgba(0, 0, 0, 0.46);
+  --background: radial-gradient(circle at top left, #17171e 0%, transparent 34%),
+    radial-gradient(circle at top right, #121218 0%, transparent 30%),
+    linear-gradient(180deg, #020203 0%, #070709 48%, #030304 100%);
+  --ornament-a: radial-gradient(circle, #23232c 0%, transparent 72%);
+  --ornament-b: radial-gradient(circle, #1b1b23 0%, transparent 72%);
+  --ornament-c: radial-gradient(circle, #131319 0%, transparent 72%);
+}

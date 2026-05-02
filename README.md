@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Heartline Chat
 
-## Getting Started
+Private, modern and mobile-first two-person chat app built with Next.js App Router, TypeScript, Tailwind CSS v4 and Supabase.
 
-First, run the development server:
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Supabase Auth
+- Supabase Database + RLS
+- Supabase Realtime
+- PWA-ready manifest and service worker scaffold
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local` from `.env.local.example` and fill the Supabase values before starting.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Mobile Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+For mobile browser testing on the same Wi-Fi network:
 
-## Learn More
+```bash
+npm run dev:mobile
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open the app from your computer's local IP on your phone.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Important:
+- Full PWA install and service worker features require a secure context.
+- `localhost` is secure on the same machine, but `http://<LAN-IP>:3000` on a phone is not.
+- For real phone install testing, use an HTTPS deployment or a secure tunnel.
