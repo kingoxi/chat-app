@@ -26,6 +26,18 @@ const initialFormState: FormState = {
 function mapAuthErrorMessage(message: string, mode: "login" | "register") {
   const normalized = message.toLowerCase();
 
+  if (normalized.includes("missing supabase environment variables")) {
+    return "Sunucuda Supabase ortam değişkenleri build aninda yuklenmemis. Hosting panelinde env'leri kaydedip npm run build komutunu tekrar calistir.";
+  }
+
+  if (normalized.includes("invalid api key") || normalized.includes("invalid apikey")) {
+    return "Supabase anahtari gecersiz gorunuyor. NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY degerini tekrar kontrol et.";
+  }
+
+  if (normalized.includes("failed to fetch") || normalized.includes("networkerror")) {
+    return "Supabase'a baglanilamadi. URL, key ve sunucunun dis istek erisimi kontrol edilmeli.";
+  }
+
   if (normalized.includes("invalid login credentials")) {
     return "E-posta veya şifre hatalı. Hesabı yeni oluşturduysan önce e-postanı doğrulaman gerekebilir.";
   }
