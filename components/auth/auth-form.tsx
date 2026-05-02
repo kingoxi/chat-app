@@ -3,7 +3,14 @@
 import { startTransition, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Eye, EyeOff, LoaderCircle, MailCheck } from "lucide-react";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  MailCheck,
+  TestTubeDiagonal,
+} from "lucide-react";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -17,11 +24,29 @@ type FormState = {
   displayName: string;
 };
 
+type DiagnosticItem = {
+  label: string;
+  status: "idle" | "ok" | "error";
+  detail: string;
+};
+
 const initialFormState: FormState = {
   email: "",
   password: "",
   displayName: "",
 };
+
+function maskValue(value: string | undefined) {
+  if (!value) {
+    return "eksik";
+  }
+
+  if (value.length <= 8) {
+    return value;
+  }
+
+  return `${value.slice(0, 6)}...${value.slice(-4)}`;
+}
 
 function mapAuthErrorMessage(message: string, mode: "login" | "register") {
   const normalized = message.toLowerCase();
@@ -68,12 +93,17 @@ function mapAuthErrorMessage(message: string, mode: "login" | "register") {
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
   const supabase = useMemo(() => createBrowserSupabaseClient(), []);
+  const publicSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const publicSupabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const publicGiphyKey = process.env.NEXT_PUBLIC_GIPHY_API_KEY;
   const [formState, setFormState] = useState(initialFormState);
   const [isPending, setIsPending] = useState(false);
   const [isResetPending, setIsResetPending] = useState(false);
+  const [isDiagnosticsPending, setIsDiagnosticsPending] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [diagnostics, setDiagnostics] = useState<DiagnosticItem[]>([]);
 
   const isRegister = mode === "register";
 
@@ -177,6 +207,112 @@ export function AuthForm({ mode }: AuthFormProps) {
       setErrorMessage(mapAuthErrorMessage(message, "login"));
     } finally {
       setIsResetPending(false);
+    }
+  }
+
+  async function runDiagnostics() {
+    const initialChecks: DiagnosticItem[] = [
+      {
+        label: "Supabase URL",
+        status: publicSupabaseUrl ? "ok" : "error",
+        detail: publicSupabaseUrl ?? "NEXT_PUBLIC_SUPABASE_URL eksik",
+      },
+      {
+        label: "Supabase Publishable Key",
+        status: publicSupabaseKey ? "ok" : "error",
+        detail: maskValue(publicSupabaseKey),
+      },
+      {
+        label: "GIPHY Key",
+        status: publicGiphyKey ? "ok" : "error",
+        detail: maskValue(publicGiphyKey),
+      },
+    ];
+
+    setDiagnostics(initialChecks);
+    setIsDiagnosticsPending(true);
+
+    try {
+      if (!supabase) {
+        setDiagnostics((current) => [
+          ...current,
+          {
+            label: "Supabase Client",
+            status: "error",
+            detail: "Client olusturulamadi. Env degerleri build aninda yuklenmemis.",
+          },
+        ]);
+        return;
+      }
+
+      const nextChecks: DiagnosticItem[] = [];
+
+      try {
+        const { error } = await supabase.rpc("get_my_room_id");
+        nextChecks.push({
+          label: "Supabase DB RPC",
+          status: error ? "error" : "ok",
+          detail: error ? error.message : "DB baglantisi ve RPC erisimi calisiyor.",
+        });
+      } catch (error) {
+        nextChecks.push({
+          label: "Supabase DB RPC",
+          status: "error",
+          detail:
+            error instanceof Error ? error.message : "Supabase RPC testi basarisiz oldu.",
+        });
+      }
+
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+        nextChecks.push({
+          label: "Supabase Auth",
+          status: error ? "error" : "ok",
+          detail: error
+            ? error.message
+            : session?.user?.email
+              ? `Aktif oturum var: ${session.user.email}`
+              : "Auth istemcisi cevap veriyor, aktif oturum yok.",
+        });
+      } catch (error) {
+        nextChecks.push({
+          label: "Supabase Auth",
+          status: "error",
+          detail:
+            error instanceof Error ? error.message : "Supabase Auth testi basarisiz oldu.",
+        });
+      }
+
+      if (publicGiphyKey) {
+        try {
+          const url = new URL("https://api.giphy.com/v1/gifs/trending");
+          url.searchParams.set("api_key", publicGiphyKey);
+          url.searchParams.set("limit", "1");
+
+          const response = await fetch(url.toString());
+          nextChecks.push({
+            label: "GIPHY API",
+            status: response.ok ? "ok" : "error",
+            detail: response.ok
+              ? "GIPHY cevabi alindi."
+              : `HTTP ${response.status} ${response.statusText}`,
+          });
+        } catch (error) {
+          nextChecks.push({
+            label: "GIPHY API",
+            status: "error",
+            detail:
+              error instanceof Error ? error.message : "GIPHY testi basarisiz oldu.",
+          });
+        }
+      }
+
+      setDiagnostics((current) => [...current, ...nextChecks]);
+    } finally {
+      setIsDiagnosticsPending(false);
     }
   }
 
@@ -321,6 +457,53 @@ export function AuthForm({ mode }: AuthFormProps) {
           {submitLabel}
         </button>
       </form>
+
+      {!isRegister ? (
+        <div className="rounded-[1.4rem] border border-border bg-white/56 px-4 py-4 text-sm leading-6 text-muted dark:bg-white/5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="font-semibold text-foreground">Bağlantı testi</p>
+              <p className="text-xs text-muted">
+                Supabase env, auth, DB RPC ve GIPHY erişimini kontrol eder.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={runDiagnostics}
+              disabled={isDiagnosticsPending}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-white/72 px-4 py-2 font-semibold text-foreground shadow-soft transition hover:text-accent disabled:opacity-60 dark:bg-white/8"
+            >
+              {isDiagnosticsPending ? (
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+              ) : (
+                <TestTubeDiagonal className="h-4 w-4" />
+              )}
+              DB test
+            </button>
+          </div>
+
+          {diagnostics.length > 0 ? (
+            <div className="mt-4 space-y-2">
+              {diagnostics.map((item) => (
+                <div
+                  key={item.label}
+                  className={cn(
+                    "rounded-2xl border px-3 py-2 text-xs",
+                    item.status === "ok"
+                      ? "border-success/25 bg-success/10 text-success"
+                      : item.status === "error"
+                        ? "border-danger/25 bg-danger/10 text-danger"
+                        : "border-border bg-white/70 text-muted dark:bg-white/6",
+                  )}
+                >
+                  <p className="font-semibold">{item.label}</p>
+                  <p className="mt-1 break-all">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="rounded-[1.4rem] border border-border bg-white/56 px-4 py-4 text-sm leading-6 text-muted dark:bg-white/5">
         Girişten sonra seni partner kodu ekranına ya da doğrudan sohbet odana götürüyoruz.
