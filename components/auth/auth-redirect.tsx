@@ -9,6 +9,10 @@ export function AuthRedirect() {
   const supabase = useMemo(() => createBrowserSupabaseClient(), []);
 
   useEffect(() => {
+    if (!supabase) {
+      return;
+    }
+
     let isMounted = true;
 
     async function hydrateSession() {

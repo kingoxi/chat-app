@@ -75,6 +75,10 @@ export function AuthForm({ mode }: AuthFormProps) {
     setIsPending(true);
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase ortam değişkenleri eksik.");
+      }
+
       if (isRegister) {
         const { data, error } = await supabase.auth.signUp({
           email: formState.email.trim(),
@@ -135,6 +139,10 @@ export function AuthForm({ mode }: AuthFormProps) {
     setIsResetPending(true);
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase ortam değişkenleri eksik.");
+      }
+
       const redirectTo =
         typeof window !== "undefined"
           ? `${window.location.origin}/reset-password`
@@ -162,6 +170,14 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <div className="space-y-6">
+      {!supabase ? (
+        <p className="rounded-2xl border border-danger/25 bg-danger/10 px-4 py-3 text-sm text-danger">
+          Supabase ortam değişkenleri tanımlı değil. Hosting panelinde
+          `NEXT_PUBLIC_SUPABASE_URL` ve
+          `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` eklenmeli.
+        </p>
+      ) : null}
+
       <div className="space-y-2">
         <h2 className="font-display text-3xl font-semibold">
           {isRegister ? "Özel alanınızı oluşturalım" : "Tekrar hoş geldin"}
@@ -243,10 +259,10 @@ export function AuthForm({ mode }: AuthFormProps) {
 
         {!isRegister ? (
           <div className="flex items-center justify-between gap-3 text-sm">
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              disabled={isResetPending}
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            disabled={isResetPending || !supabase}
               className="inline-flex items-center gap-2 font-medium text-accent transition hover:text-accent-strong disabled:opacity-70"
             >
               {isResetPending ? (
@@ -279,7 +295,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || !supabase}
           className={cn(
             "flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-semibold text-white transition",
             "bg-[linear-gradient(135deg,#b24d74_0%,#d07c8f_100%)] shadow-soft hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70",

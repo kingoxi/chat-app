@@ -34,6 +34,10 @@ export default function ResetPasswordPage() {
     setIsPending(true);
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase ortam değişkenleri eksik.");
+      }
+
       const { error } = await supabase.auth.updateUser({
         password,
       });
@@ -73,6 +77,14 @@ export default function ResetPasswordPage() {
         </p>
 
         <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          {!supabase ? (
+            <p className="rounded-2xl border border-danger/25 bg-danger/10 px-4 py-3 text-sm text-danger">
+              Supabase ortam değişkenleri tanımlı değil. Hosting paneline
+              `NEXT_PUBLIC_SUPABASE_URL` ve
+              `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` ekle.
+            </p>
+          ) : null}
+
           <label className="block space-y-2">
             <span className="text-sm font-medium">Yeni şifre</span>
             <div className="relative">
@@ -122,7 +134,7 @@ export default function ResetPasswordPage() {
 
           <button
             type="submit"
-            disabled={isPending}
+            disabled={isPending || !supabase}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#b24d74_0%,#d07c8f_100%)] px-4 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:opacity-95 disabled:opacity-70"
           >
             {isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : null}
