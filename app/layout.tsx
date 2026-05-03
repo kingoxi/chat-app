@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { AppProviders } from "@/components/providers/app-providers";
+import { readPublicEnvFromProcess } from "@/lib/public-env";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,6 +31,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const publicEnv = readPublicEnvFromProcess();
+
   return (
     <html
       lang="tr"
@@ -37,6 +40,11 @@ export default function RootLayout({
       className="h-full antialiased"
     >
       <body className="min-h-full">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__HEARTLINE_PUBLIC_ENV__ = ${JSON.stringify(publicEnv)};`,
+          }}
+        />
         <AppProviders>
           <div className="relative min-h-screen overflow-x-hidden">
             <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

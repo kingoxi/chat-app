@@ -11,6 +11,7 @@ import {
   MailCheck,
   TestTubeDiagonal,
 } from "lucide-react";
+import { readPublicEnv } from "@/lib/public-env";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -93,9 +94,10 @@ function mapAuthErrorMessage(message: string, mode: "login" | "register") {
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
   const supabase = useMemo(() => createBrowserSupabaseClient(), []);
-  const publicSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const publicSupabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  const publicGiphyKey = process.env.NEXT_PUBLIC_GIPHY_API_KEY;
+  const runtimeEnv = useMemo(() => readPublicEnv(), []);
+  const publicSupabaseUrl = runtimeEnv.NEXT_PUBLIC_SUPABASE_URL;
+  const publicSupabaseKey = runtimeEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const publicGiphyKey = runtimeEnv.NEXT_PUBLIC_GIPHY_API_KEY;
   const [formState, setFormState] = useState(initialFormState);
   const [isPending, setIsPending] = useState(false);
   const [isResetPending, setIsResetPending] = useState(false);

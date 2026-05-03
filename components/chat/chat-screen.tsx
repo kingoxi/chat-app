@@ -39,6 +39,7 @@ import {
   mapGiphyApiGif,
   type GiphySearchResult,
 } from "@/lib/giphy";
+import { readPublicEnv } from "@/lib/public-env";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import type {
@@ -248,7 +249,10 @@ export function ChatScreen({
   const pendingAudioResolveRef = useRef(new Set<string>());
   const partnerIdRef = useRef<string | null>(partner?.id ?? null);
   const seenGifAnalyticsIdsRef = useRef(new Set<string>());
-  const giphyApiKey = process.env.NEXT_PUBLIC_GIPHY_API_KEY ?? "";
+  const giphyApiKey = useMemo(
+    () => readPublicEnv().NEXT_PUBLIC_GIPHY_API_KEY ?? "",
+    [],
+  );
   const canUseGiphy = Boolean(giphyApiKey);
   const giphyRandomIdKey = useMemo(
     () => `giphy-random-id:${currentUser.id}`,

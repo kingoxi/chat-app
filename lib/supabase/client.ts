@@ -1,6 +1,7 @@
 "use client";
 
 import { createBrowserClient } from "@supabase/ssr";
+import { hasSupabasePublicEnv, readPublicEnv } from "@/lib/public-env";
 import type { Database } from "@/types/database";
 
 let browserClient: ReturnType<typeof createBrowserClient<Database>> | undefined;
@@ -42,10 +43,11 @@ export function createBrowserSupabaseClient() {
   }
 
   if (!browserClient) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+    const env = readPublicEnv();
+    const url = env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-    if (!url || !key) {
+    if (!hasSupabasePublicEnv(env) || !url || !key) {
       return getMissingEnvClient();
     }
 
