@@ -3,49 +3,10 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const next = require("next");
-
-function loadEnvFile(filePath) {
-  if (!fs.existsSync(filePath)) {
-    return false;
-  }
-
-  const fileContent = fs.readFileSync(filePath, "utf8");
-  const lines = fileContent.split(/\r?\n/);
-
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
-
-    if (!line || line.startsWith("#")) {
-      continue;
-    }
-
-    const separatorIndex = line.indexOf("=");
-
-    if (separatorIndex <= 0) {
-      continue;
-    }
-
-    const key = line.slice(0, separatorIndex).trim();
-    let value = line.slice(separatorIndex + 1).trim();
-
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-
-    if (!process.env[key]) {
-      process.env[key] = value;
-    }
-  }
-
-  return true;
-}
+const { loadRuntimeEnv } = require("./scripts/load-env");
 
 const cwd = process.cwd();
-loadEnvFile(path.join(cwd, ".env"));
-loadEnvFile(path.join(cwd, ".env.production"));
+loadRuntimeEnv(cwd);
 
 const dev = process.env.NODE_ENV !== "production";
 const host = process.env.HOST || "0.0.0.0";
